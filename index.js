@@ -165,7 +165,7 @@ function getCPUInfo() {
     var cpus = os.cpus()
     for(var i = 0 , len = cpus.length; i < len; i++){
         var cpu = cpus[i];
-        output += "\t" +cpu.model + " " + cpu.speed + " user:" + cpu.times.user + " nice:" + cpu.times.nice + " sys:" + cpu.times.sys + " idle:" + cpu.times.idle + " irq:" + cpu.times.irq ;
+        output += "\r\n" + cpu.model + " " + cpu.speed + "\r\nuser:" + cpu.times.user + " nice:" + cpu.times.nice + " sys:" + cpu.times.sys + " idle:" + cpu.times.idle + " irq:" + cpu.times.irq ;
     }
     return output
 }
