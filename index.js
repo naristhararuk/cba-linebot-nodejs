@@ -174,20 +174,20 @@ function getCPUInfo() {
 }
 
 function getCPUUsage() {
-    var output = "";
     osutils.cpuUsage(function (res){
-        return output += "CPU Usage (%) : " + res;
+        var output = "";
+        output += "CPU Usage (%) : " + res;
+        return output;
     });
-    //return output
 }
 
 function getDiskInfo() {
-    var output = "";
     let path = os.platform() === 'win32' ? 'c' : '/';
     diskspace.check(path,function (err, res){
-       return output += res.used + "/" + res.total + " status:" + res.status;
+        var output = "";
+        output += res.used + "/" + res.total + " status:" + res.status;
+        return output;
     });
-    
 }
 
 app.listen(app.get('port'),function(){
