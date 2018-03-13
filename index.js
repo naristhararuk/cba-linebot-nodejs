@@ -41,7 +41,8 @@ function handleMessageEvent(event) {
     var eventText = event.message.text.toLowerCase();
 
     if (eventText === 'system') {
-        var systeminfo = ""+ getCPUInfo()  + "\r\n"+ getCPUUsage() + "\r\n" + getDiskInfo();
+        var systeminfo = ""+ getCPUInfo().then  + "\r\n"+ getCPUUsage() + "\r\n" + getDiskInfo();
+        
         msg = {
             type: 'text',
             text: os.platform() + systeminfo 
@@ -174,18 +175,21 @@ function getCPUInfo() {
 }
 
 function getCPUUsage() {
-    osutils.cpuUsage(function (res){
+ var x =   osutils.cpuUsage(function (res){
         var output = "";
-        output += "CPU Usage (%) : " + res;
+        output = "CPU Usage (%) : " + res.toString() ;
         return output;
     });
+
+    return x;
+    
 }
 
 function getDiskInfo() {
     let path = os.platform() === 'win32' ? 'C' : '/';
     diskspace.check(path,function (err, res){
         var output = "";
-        output += (res.total - res.free) + "/" + res.total + " status:" + res.status;
+        output = (res.total - res.free).toString() + "/" + res.total.toString() + " status:" + res.status.toString();
         return output;
     });
 }
