@@ -41,7 +41,7 @@ function handleMessageEvent(event) {
     var eventText = event.message.text.toLowerCase();
 
     if (eventText === 'system') {
-        var systeminfo = ""+ getCPUInfo().then  + "\r\n"+ getCPUUsage() + "\r\n" + getDiskInfo();
+        var systeminfo = ""+ getCPUInfo()  + "\r\n"+ getCPUUsage() + "\r\n" + getDiskInfo();
         
         msg = {
             type: 'text',
