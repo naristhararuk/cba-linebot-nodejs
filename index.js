@@ -182,7 +182,7 @@ function getCPUUsage() {
 }
 
 function getDiskInfo() {
-    let path = os.platform() === 'win32' ? 'c' : '/';
+    let path = os.platform() === 'win32' ? 'C' : '/';
     diskspace.check(path,function (err, res){
         var output = "";
         output += (res.total - res.free) + "/" + res.total + " status:" + res.status;
