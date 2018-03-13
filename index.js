@@ -5,8 +5,8 @@ var app = express();
 app.set('port',(process.env.PORT || 80));
 
 const config = {
-    channelAccessToken : "PGDUuG+ZizRjnlGdLhHXlJQZflrZloEy3EKwrFm4XQeeLBG7rgUTPpqeGdrxqCBsoKagcL6Ou32MVyLdsWQf2njd/asEoKwUrTrzwk4gJM0RWey2napi4RDMsIK3LdoWityXm9T3jWXO4vrbDkrA5gdB04t89/1O/w1cDnyilFU=",
-    channelSecret : "dd019042a09779942b5a37df9eb9ebcc"
+    channelAccessToken : "TdqdtCrLMAyH0DRvDsJEa0cZkUAoDGRROJilbToDmod3nSj2wpg54wqNqCajrD+EoKagcL6Ou32MVyLdsWQf2njd/asEoKwUrTrzwk4gJM2psUewHffRRjT/bbhd0gZoEDLh+RnGlbGgl/V7EtpmuAdB04t89/1O/w1cDnyilFU=",
+    channelSecret : "42f6cd974e200b9a67886cd98893f354"
 };
 const client = new line.Client(config);
 
@@ -14,13 +14,14 @@ const client = new line.Client(config);
 app.get('/',function (req,res){
     res.send('Hello World')
 });
-app.post('/webhook',line.middleware(config),(req,res) => {
+app.post('/webhook', line.middleware(config), (req, res) => {
     Promise
-        .all(req.body,events.map(handleEvent))
+        .all(req.body.events.map(handleEvent))
         .then((result) => res.json(result));
 });
 
-function handleEvent(event){
+function handleEvent(event) {
+
     console.log(event);
     if (event.type === 'message' && event.message.type === 'text') {
         handleMessageEvent(event);
@@ -28,12 +29,13 @@ function handleEvent(event){
         return Promise.resolve(null);
     }
 }
+
 function handleMessageEvent(event) {
     var msg = {
         type: 'text',
         text: 'สวัสดีครัช'
     };
-    return client.replyMessage(event.replyToken,msg);
+    return client.replyMessage(event.replyToken, msg);
 //Launch lintening server on port 80
 }
 app.listen(app.get('port'),function(){
