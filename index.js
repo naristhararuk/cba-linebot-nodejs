@@ -39,7 +39,7 @@ function handleMessageEvent(event) {
     var eventText = event.message.text.toLowerCase();
 
     if (eventText === 'system') {
-        var systeminfo =  'ข้อมูลระบบ cpu: ' + os.cpus()  + ' TotalMemory: '+ os.freemem() +"/"+os.totalmem() ;
+        var systeminfo =  getCPUInfo();
         msg = {
             type: 'text',
             text: systeminfo 
@@ -159,6 +159,22 @@ function handleMessageEvent(event) {
     return client.replyMessage(event.replyToken, msg);
 //Launch lintening server on port 80
 }
+
+function getCPUInfo() {
+    var output = "";
+    var cpus = os.cpus()
+    for(var i = 0 , len = cpus.length; i < len; i++){
+        var cpu = cups[i],total = 0;
+        for(var type in cpu.times){
+            total += cpu.times[type]
+        }
+        for(var type in cpu.times){
+            output += "\t" + type + Math.round(100*cpu.times[type] / total)
+        }
+    }
+    return output
+}
+
 app.listen(app.get('port'),function(){
     console.log('App Lintening on port ',app.get('port'));
 });
