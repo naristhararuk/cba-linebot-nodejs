@@ -42,10 +42,14 @@ function handleMessageEvent(event) {
 
     if (eventText === 'system') {
         var systeminfo = ""+ getCPUInfo()  + "\r\n"+ getCPUUsage() + "\r\n" + getDiskInfo();
-        
+        var cpuusage = osutils.cpuUsage(function (res){
+            var output = "";
+            output = "CPU Usage (%) : " + res.toString() ;
+            return output;
+        });
         msg = {
             type: 'text',
-            text: os.platform() + systeminfo 
+            text: os.platform() + systeminfo + cpuusage
         }
     } else if (eventText === 'image') {
         msg = {
