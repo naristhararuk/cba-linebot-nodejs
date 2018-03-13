@@ -1,8 +1,8 @@
-var express = require('express')
-var line = require('@line/bot-sdk')
-var app = express()
+var express = require('express');
+var line = require('@line/bot-sdk');
+var app = express();
 
-app.set('port',(process.env.PORT || 5000));
+app.set('port',(process.env.PORT || 80));
 
 const config = {
     channelAccessToken : "PGDUuG+ZizRjnlGdLhHXlJQZflrZloEy3EKwrFm4XQeeLBG7rgUTPpqeGdrxqCBsoKagcL6Ou32MVyLdsWQf2njd/asEoKwUrTrzwk4gJM0RWey2napi4RDMsIK3LdoWityXm9T3jWXO4vrbDkrA5gdB04t89/1O/w1cDnyilFU=",
@@ -18,7 +18,6 @@ app.post('/webhook',line.middleware(config),(req,res) => {
     Promise
         .all(req.body,events.map(handleEvent))
         .then((result) => res.json(result));
-    res.sendStatus(200)
 });
 
 function handleEvent(event){
@@ -38,5 +37,5 @@ function handleMessageEvent(event) {
 //Launch lintening server on port 80
 }
 app.listen(app.get('port'),function(){
-    console.log('App Lintening on port 5000')
+    console.log('App Lintening on port ',app.get('port'));
 });
