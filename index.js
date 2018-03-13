@@ -168,27 +168,26 @@ function getCPUInfo() {
     for(var i = 0 , len = cpus.length; i < len; i++){
         var cpu = cpus[i];
         output += "\r\n" + cpu.model + " " + cpu.speed + "\r\nuser:" + cpu.times.user + " nice:" + cpu.times.nice + " sys:" + cpu.times.sys + " idle:" + cpu.times.idle + " irq:" + cpu.times.irq ;
-        output += "\r\nMemory" +"\r\n"+ os.freemem() +"/"+ os.totalmem() + "byte";
     }
-    
+    output += "\r\nMemory" +"\r\n"+ os.freemem() +"/"+ os.totalmem() + "byte";
     return output
 }
 
 function getCPUUsage() {
     var output = "";
-    osutils.cpuUsage(function (res){
-       output += "CPU Usage (%) : " + res;
+    return osutils.cpuUsage(function (res){
+        output += "CPU Usage (%) : " + res;
     });
-    return output
+    //return output
 }
 
 function getDiskInfo() {
     var output = "";
     let path = os.platform() === 'win32' ? 'c' : '/';
-    diskspace.check(path,function (err, res){
+    return diskspace.check(path,function (err, res){
        output += res.used + "/" + res.total + " status:" + res.status;
     });
-    return output
+    //return output
 }
 
 app.listen(app.get('port'),function(){
