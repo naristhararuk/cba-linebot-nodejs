@@ -164,12 +164,12 @@ function getCPUInfo() {
     var output = "";
     var cpus = os.cpus()
     for(var i = 0 , len = cpus.length; i < len; i++){
-        var cpu = cups[i],total = 0;
+        var cpu = cpus[i],total = 0;
         for(var type in cpu.times){
             total += cpu.times[type]
         }
         for(var type in cpu.times){
-            output += "\t" + type + Math.round(100*cpu.times[type] / total)
+            output += "\t" +cpu.model +" " + cpu.speed + type + Math.round(100*cpu.times[type] / total)
         }
     }
     return output
