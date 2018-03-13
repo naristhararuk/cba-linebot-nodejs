@@ -39,7 +39,7 @@ function handleMessageEvent(event) {
     var eventText = event.message.text.toLowerCase();
 
     if (eventText === 'system') {
-        var systeminfo =  'ข้อมูลระบบ cpu: ' + os.cpus  + ' TotalMemory: '+ os.freemem +"/"+os.totalmem ;
+        var systeminfo =  'ข้อมูลระบบ cpu: ' + os.cpus()  + ' TotalMemory: '+ os.freemem() +"/"+os.totalmem() ;
         msg = {
             type: 'text',
             text: systeminfo 
