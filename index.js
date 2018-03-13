@@ -36,7 +36,7 @@ function handleMessageEvent(event) {
     };
     return client.replyMessage(event.replyToken,msg);
 //Launch lintening server on port 80
-
+}
 app.listen(app.get('port'),function(){
     console.log('App Lintening on port 5000')
 })
