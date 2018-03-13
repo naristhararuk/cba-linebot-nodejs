@@ -39,10 +39,10 @@ function handleMessageEvent(event) {
     var eventText = event.message.text.toLowerCase();
 
     if (eventText === 'system') {
-        var systeminfo =  getCPUInfo();
+        var systeminfo = ""+ getCPUInfo();
         msg = {
             type: 'text',
-            text: systeminfo 
+            text: os.platform() + systeminfo 
         }
     } else if (eventText === 'image') {
         msg = {
@@ -164,13 +164,8 @@ function getCPUInfo() {
     var output = "";
     var cpus = os.cpus()
     for(var i = 0 , len = cpus.length; i < len; i++){
-        var cpu = cpus[i],total = 0;
-        for(var type in cpu.times){
-            total += cpu.times[type]
-        }
-        for(var type in cpu.times){
-            output += "\t" +cpu.model +" " + cpu.speed + type + Math.round(100*cpu.times[type] / total)
-        }
+        var cpu = cpus[i];
+        output += "\t" +cpu.model + " " + cpu.speed + " user:" + cpu.times.user + " nice:" + cpu.times.nice + " sys:" + cpu.times.sys + " idle:" + cpu.times.idle + " irq:" + cpu.times.irq ;
     }
     return output
 }
