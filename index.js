@@ -175,8 +175,8 @@ function getCPUInfo() {
 
 function getCPUUsage() {
     var output = "";
-    return osutils.cpuUsage(function (res){
-        output += "CPU Usage (%) : " + res;
+    osutils.cpuUsage(function (res){
+        return output += "CPU Usage (%) : " + res;
     });
     //return output
 }
@@ -184,10 +184,10 @@ function getCPUUsage() {
 function getDiskInfo() {
     var output = "";
     let path = os.platform() === 'win32' ? 'c' : '/';
-    return diskspace.check(path,function (err, res){
-       output += res.used + "/" + res.total + " status:" + res.status;
+    diskspace.check(path,function (err, res){
+       return output += res.used + "/" + res.total + " status:" + res.status;
     });
-    //return output
+    
 }
 
 app.listen(app.get('port'),function(){
