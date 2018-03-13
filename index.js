@@ -1,6 +1,8 @@
 var express = require('express');
 var line = require('@line/bot-sdk');
 var os = require('os');
+var diskspace = require('diskspace');
+var osutils = require('os-utils');
 var app = express();
 
 app.set('port',(process.env.PORT || 80));
@@ -39,7 +41,7 @@ function handleMessageEvent(event) {
     var eventText = event.message.text.toLowerCase();
 
     if (eventText === 'system') {
-        var systeminfo = ""+ getCPUInfo();
+        var systeminfo = ""+ getCPUInfo()  + "\r\n"+ getCPUUsage() + "\r\n" + getDiskInfo();
         msg = {
             type: 'text',
             text: os.platform() + systeminfo 
@@ -166,7 +168,26 @@ function getCPUInfo() {
     for(var i = 0 , len = cpus.length; i < len; i++){
         var cpu = cpus[i];
         output += "\r\n" + cpu.model + " " + cpu.speed + "\r\nuser:" + cpu.times.user + " nice:" + cpu.times.nice + " sys:" + cpu.times.sys + " idle:" + cpu.times.idle + " irq:" + cpu.times.irq ;
+        output += "\r\nMemory" +"\r\n"+ os.freemem() +"/"+ os.totalmem() + "byte";
     }
+    
+    return output
+}
+
+function getCPUUsage() {
+    var output = "";
+    osutils.cpuUsage(function (res){
+       output += "CPU Usage (%) : " + res;
+    });
+    return output
+}
+
+function getDiskInfo() {
+    var output = "";
+    let path = os.platform() === 'win32' ? 'c' : '/';
+    diskspace.check(path,function (err, res){
+       output += res.used + "/" + res.total + " status:" + res.status;
+    });
     return output
 }
 
