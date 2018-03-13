@@ -1,5 +1,6 @@
 var express = require('express');
 var line = require('@line/bot-sdk');
+var os = require('os');
 var app = express();
 
 app.set('port',(process.env.PORT || 80));
@@ -37,7 +38,13 @@ function handleMessageEvent(event) {
     };
     var eventText = event.message.text.toLowerCase();
 
-    if (eventText === 'image') {
+    if (eventText === 'system') {
+        var systeminfo =  'ข้อมูลระบบ cpu: ' + os.cpus  + ' TotalMemory: '+ os.freemem +"/"+os.totalmem ;
+        msg = {
+            type: 'text',
+            text: systeminfo 
+        }
+    } else if (eventText === 'image') {
         msg = {
             'type': 'image',
             'originalContentUrl': 'https://www.thesun.co.uk/wp-content/uploads/2017/03/fifa-17-2.jpg?strip=all&w=742&quality=100',
