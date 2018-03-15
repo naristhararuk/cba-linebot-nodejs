@@ -1,7 +1,7 @@
 var express = require('express');
 var line = require('@line/bot-sdk');
 var os = require('os');
-var diskspace = require('diskspace');
+var diskspace = require('diskcheck');
 var osutils = require('os-utils');
 var app = express();
 
@@ -41,7 +41,7 @@ function handleMessageEvent(event) {
     var eventText = event.message.text.toLowerCase();
 
     if (eventText === 'system') {
-        var systeminfo = ""+ getCPUInfo()  + "\r\n"+ getCPUUsage() + "\r\n" + getDiskInfo();
+        var systeminfo = ""+ getCPUInfo()  + "\r\n"+ getCPUUsage() + "\r\n" + diskspace;
         msg = {
             type: 'text',
             text: os.platform() + systeminfo 
