@@ -1,7 +1,7 @@
 var express = require('express');
 var line = require('@line/bot-sdk');
 var os = require('os');
-var diskspace = require('diskcheck');
+var diskspace = require('diskspace');
 var osutils = require('os-utils');
 var app = express();
 
@@ -41,7 +41,7 @@ function handleMessageEvent(event) {
     var eventText = event.message.text.toLowerCase();
 
     if (eventText === 'system') {
-        var systeminfo = ""+ getCPUInfo()  + "\r\n"+ getCPUUsage() + "\r\n" + diskspace;
+        var systeminfo = ""+ getCPUInfo()  + "\r\n"+ getCPUUsage() + "\r\n" + getDiskInfo();
         msg = {
             type: 'text',
             text: os.platform() + systeminfo 
@@ -184,13 +184,13 @@ function getCPUUsage() {
 }
 
 function getDiskInfo() {
-    let path = os.platform() === 'win32' ? 'C' : '/';
+    let path = os.platform() === 'win32' ? 'C' : '/'; 
+    var output = "";
     var disk = diskspace.check(path,function (err, res){
-        var output = "";
         output = (res.total - res.free).toString() + "/" + res.total.toString() + " status:" + res.status.toString();
         return output;
     });
-    return disk;
+    return disk();
 }
 
 app.listen(app.get('port'),function(){
