@@ -183,14 +183,14 @@ function getCPUUsage() {
     
 }
 
-function getDiskInfo() {
+async function getDiskInfo() {
     let path = os.platform() === 'win32' ? 'C' : '/'; 
     var output = "";
     var disk = diskspace.check(path,function (err, res){
         output = (res.total - res.free).toString() + "/" + res.total.toString() + " status:" + res.status.toString();
         return output;
     });
-    return disk();
+    return await output;
 }
 
 app.listen(app.get('port'),function(){
