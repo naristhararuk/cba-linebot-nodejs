@@ -181,21 +181,21 @@ function getCPUInfo() {
 function getCPUUsage() {
  var x =   osutils.cpuUsage(function (res){
         var output = "";
-        output = "CPU Usage (%) : " + res.toString() ;
+        output = "CPU Usage (%) : " + res..toString() ;
         return output;
     });
-
     return x;
     
 }
 
 function getDiskInfo() {
     let path = os.platform() === 'win32' ? 'C' : '/';
-    diskspace.check(path,function (err, res){
+    var disk = diskspace.check(path,function (err, res){
         var output = "";
         output = (res.total - res.free).toString() + "/" + res.total.toString() + " status:" + res.status.toString();
         return output;
     });
+    return disk;
 }
 
 app.listen(app.get('port'),function(){
