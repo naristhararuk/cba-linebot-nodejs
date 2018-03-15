@@ -42,14 +42,9 @@ function handleMessageEvent(event) {
 
     if (eventText === 'system') {
         var systeminfo = ""+ getCPUInfo()  + "\r\n"+ getCPUUsage() + "\r\n" + getDiskInfo();
-        var cpuusage = osutils.cpuUsage(function (res){
-            var output = "";
-            output = "CPU Usage (%) : " + res.toString() ;
-            return output;
-        });
         msg = {
             type: 'text',
-            text: os.platform() + systeminfo + cpuusage
+            text: os.platform() + systeminfo 
         }
     } else if (eventText === 'image') {
         msg = {
@@ -179,12 +174,12 @@ function getCPUInfo() {
 }
 
 function getCPUUsage() {
- var x =   osutils.cpuUsage(function (res){
+    var cuse = osutils.cpuUsage(function (res){
         var output = "";
-        output = "CPU Usage (%) : " + res..toString() ;
+        output = "CPU Usage (%) : " + res.toString() ;
         return output;
     });
-    return x;
+    return cuse;
     
 }
 
