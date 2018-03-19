@@ -42,7 +42,7 @@ function handleMessageEvent(event) {
 
     if (eventText === 'system') {
         var diskinfo = await getDiskInfo();
-        var cpuusage = getCPUUsage();
+        var cpuusage = await getCPUUsage();
         var systeminfo = ""+ getCPUInfo()  + "\r\n"+ cpuusage + "\r\n" + diskinfo;
         
         msg = {
