@@ -41,7 +41,10 @@ function handleMessageEvent(event) {
     var eventText = event.message.text.toLowerCase();
 
     if (eventText === 'system') {
-        var systeminfo = ""+ getCPUInfo()  + "\r\n"+ getCPUUsage() + "\r\n" + getDiskInfo();
+        var diskinfo = await getDiskInfo();
+        var cpuusage = getCPUUsage();
+        var systeminfo = ""+ getCPUInfo()  + "\r\n"+ cpuusage + "\r\n" + diskinfo;
+        
         msg = {
             type: 'text',
             text: os.platform() + systeminfo 
@@ -173,25 +176,31 @@ function getCPUInfo() {
     return output
 }
 
-function getCPUUsage() {
-    var cuse = osutils.cpuUsage(function (res){
-        var output = "";
-        output = "CPU Usage (%) : " + res.toString() ;
-        return output;
+
+var getCPUUsage = function(){
+    return new Promise(function(resolve){
+        osutils.cpuUsage(function (){
+            resolve(res);
+        });
     });
-    return cuse;
-    
 }
 
-async function getDiskInfo() {
-    let path = os.platform() === 'win32' ? 'C' : '/'; 
-    var output = "";
-    var disk = diskspace.check(path,function (err, res){
-        output = (res.total - res.free).toString() + "/" + res.total.toString() + " status:" + res.status.toString();
-        return output;
+var getDiskInfo = function(){
+    return new Promise(function(resolve){
+        diskspace.check('/',function(err,result){
+            resolve(result.total);
+        });
     });
-    return await output;
 }
+// function getDiskInfo() {
+//     let path = os.platform() === 'win32' ? 'C' : '/'; 
+//     var output = "";
+//     return diskspace.check(path,function (err, res){
+//         output = (res.total - res.free).toString() + "/" + res.total.toString() + " status:" + res.status.toString();
+//         return callback(output);
+//     });
+//     let info = diskspace.chekSync()
+// } 
 
 app.listen(app.get('port'),function(){
     console.log('App Lintening on port ',app.get('port'));
