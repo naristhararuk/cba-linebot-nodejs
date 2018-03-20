@@ -8,7 +8,7 @@ var app = express();
 var getCPUUsage = function(){
     return new Promise(function(resolve){
         osutils.cpuUsage(function (res){
-            resolve(res);
+            resolve(res.toFixed(2));
         });
     });
 }
@@ -80,21 +80,20 @@ function handleMessageEvent(event) {
     } else if (eventText === 'disk') {
         var result =  getdiskinfo()
         result.then(function (res){ 
-            msg = {
+            return msg = {
             type: 'text',
             text: "Disk" + res 
             }
-        },1);
+        });
     } else if (eventText === 'cpu usage') {
         var result =  startcheckcpu()
         result.then(function (res){ 
             msg = {
                 type: 'text',
-                text: res 
+                text: "CPU Usage " + res + " %"
             }
             return msg
         });
-        return msg
     } else if (eventText === 'image') {
         msg = {
             'type': 'image',
