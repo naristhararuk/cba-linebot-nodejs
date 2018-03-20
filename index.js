@@ -81,13 +81,13 @@ function handleMessageEvent(event) {
         var result =  getdiskinfo()
         result.then(function (res){ 
             msg = {
-            type: 'text',
-            text: "Disk" + res 
+                type: 'text',
+                text: "Disk" + res 
             }
             return client.replyMessage(event.replyToken, msg);
         });
     } else if (eventText === 'cpu usage') {
-        var result =  startcheckcpu()
+        var result =  getCPUUsage()
         result.then(function (res){ 
             msg = {
                 type: 'text',
