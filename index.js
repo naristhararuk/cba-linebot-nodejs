@@ -5,7 +5,33 @@ var diskspace = require('diskspace');
 var osutils = require('os-utils');
 var app = express();
 
-app.set('port',(process.env.PORT || 80));
+var getCPUUsage = function(){
+    return new Promise(function(resolve){
+        osutils.cpuUsage(function (res){
+            resolve(res);
+        });
+    });
+}
+let path = os.platform() === 'win32' ? 'C' : '/'; 
+var getdiskinfo = function(){
+    return new Promise(function(resolve){
+        diskspace.check(path,function(err,result){
+            resolve(result.used + "/" +result.total);
+        });
+    });
+}
+var startcheckdisk = async function(){
+    var diskinfo = "" + await getdiskinfo();
+    //console.log("show " + diskinfo)
+    return diskinfo;
+}
+var startcheckcpu = async function(){
+    var cpuuse = "" + await getCPUUsage();
+    //console.log("cpu usage % " + cpuuse)
+    return cpuuse;
+}
+
+app.set('port',(process.env.PORT || 5000 || 80));
 
 const config = {
     channelAccessToken : "TdqdtCrLMAyH0DRvDsJEa0cZkUAoDGRROJilbToDmod3nSj2wpg54wqNqCajrD+EoKagcL6Ou32MVyLdsWQf2njd/asEoKwUrTrzwk4gJM2psUewHffRRjT/bbhd0gZoEDLh+RnGlbGgl/V7EtpmuAdB04t89/1O/w1cDnyilFU=",
@@ -20,7 +46,8 @@ app.get('/',function (req,res){
 app.post('/webhook', line.middleware(config), (req, res) => {
     Promise
         .all(req.body.events.map(handleEvent))
-        .then((result) => res.json(result));
+        .then((result) => res.json(result))
+        .catch(errhandler);
 });
 
 function handleEvent(event) {
@@ -34,6 +61,7 @@ function handleEvent(event) {
 }
 
 function handleMessageEvent(event) {
+    try{
     var msg = {
         type: 'text',
         text: 'สวัสดีครับนี่เป็นระบบตอบกลับอัตโนมัติจาก CBA'
@@ -41,14 +69,30 @@ function handleMessageEvent(event) {
     var eventText = event.message.text.toLowerCase();
 
     if (eventText === 'system') {
-        var diskinfo = await getDiskInfo();
-        var cpuusage = await getCPUUsage();
-        var systeminfo = ""+ getCPUInfo()  + "\r\n"+ cpuusage + "\r\n" + diskinfo;
-        
+
+        //var systeminfo = ""+ getCPUInfo()  + "\r\n"+ cpuusage + "\r\n" + diskinfo;
+        var systeminfo = ""+ getCPUInfo()  ;
         msg = {
             type: 'text',
             text: os.platform() + systeminfo 
+        
         }
+    } else if (eventText === 'disk') {
+        var result =  startcheckdisk()
+        result.then(function (res){ 
+            return msg = {
+                type: 'text',
+                text: res 
+            }
+        });
+    } else if (eventText === 'cpu usage') {
+        var result =  startcheckcpu()
+        result.then(function (res){ 
+            return msg = {
+                type: 'text',
+                text: res 
+            }
+        });
     } else if (eventText === 'image') {
         msg = {
             'type': 'image',
@@ -160,8 +204,11 @@ function handleMessageEvent(event) {
             }
         }
     }
-
-    return client.replyMessage(event.replyToken, msg);
+        return client.replyMessage(event.replyToken, msg);
+    }
+    catch(err){
+        console.log(err);
+    }
 //Launch lintening server on port 80
 }
 
@@ -173,35 +220,12 @@ function getCPUInfo() {
         output += "\r\n" + cpu.model + " " + cpu.speed + "\r\nuser:" + cpu.times.user + " nice:" + cpu.times.nice + " sys:" + cpu.times.sys + " idle:" + cpu.times.idle + " irq:" + cpu.times.irq ;
     }
     output += "\r\nMemory" +"\r\n"+ os.freemem() +"/"+ os.totalmem() + "byte";
+
     return output
 }
-
-
-var getCPUUsage = function(){
-    return new Promise(function(resolve){
-        osutils.cpuUsage(function (){
-            resolve(res);
-        });
-    });
+var errhandler = function(err){
+    console.log(err);
 }
-
-var getDiskInfo = function(){
-    return new Promise(function(resolve){
-        diskspace.check('/',function(err,result){
-            resolve(result.total);
-        });
-    });
-}
-// function getDiskInfo() {
-//     let path = os.platform() === 'win32' ? 'C' : '/'; 
-//     var output = "";
-//     return diskspace.check(path,function (err, res){
-//         output = (res.total - res.free).toString() + "/" + res.total.toString() + " status:" + res.status.toString();
-//         return callback(output);
-//     });
-//     let info = diskspace.chekSync()
-// } 
-
 app.listen(app.get('port'),function(){
     console.log('App Lintening on port ',app.get('port'));
 });
