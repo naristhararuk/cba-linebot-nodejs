@@ -79,14 +79,12 @@ function handleMessageEvent(event) {
         }
     } else if (eventText === 'disk') {
         var result =  getdiskinfo()
-        var output;
         result.then(function (res){ 
-            output = res;
-        });
-        msg = {
+            msg = {
             type: 'text',
-            text: "Disk" + output 
-        }
+            text: "Disk" + res 
+            }
+        });
     } else if (eventText === 'cpu usage') {
         var result =  startcheckcpu()
         result.then(function (res){ 
