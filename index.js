@@ -80,10 +80,11 @@ function handleMessageEvent(event) {
     } else if (eventText === 'disk') {
         var result =  getdiskinfo()
         result.then(function (res){ 
-            return msg = {
+            msg = {
             type: 'text',
             text: "Disk" + res 
             }
+            return client.replyMessage(event.replyToken, msg);
         });
     } else if (eventText === 'cpu usage') {
         var result =  startcheckcpu()
@@ -92,7 +93,7 @@ function handleMessageEvent(event) {
                 type: 'text',
                 text: "CPU Usage " + res + " %"
             }
-            return msg
+            return client.replyMessage(event.replyToken, msg);
         });
     } else if (eventText === 'image') {
         msg = {
