@@ -91,7 +91,7 @@ function handleMessageEvent(event) {
         result.then(function (res){ 
             msg = {
                 type: 'text',
-                text: "CPU Usage " + res + " %"
+                text: "CPU Usage " + res 
             }
             return client.replyMessage(event.replyToken, msg);
         });
