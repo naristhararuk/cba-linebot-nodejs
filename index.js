@@ -86,7 +86,7 @@ function handleMessageEvent(event) {
             }
             return client.replyMessage(event.replyToken, msg);
         });
-    } else if (eventText === 'cpu usage') {
+    } else if (eventText === 'cpuusage') {
         var result =  getCPUUsage()
         result.then(function (res){ 
             msg = {
