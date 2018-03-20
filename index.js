@@ -8,7 +8,7 @@ var app = express();
 var getCPUUsage = function(){
     return new Promise(function(resolve){
         osutils.cpuUsage(function (res){
-            resolve(res.toFixed(2));
+            resolve(res.toFixed(2) + " %");
         });
     });
 }
@@ -82,11 +82,11 @@ function handleMessageEvent(event) {
         result.then(function (res){ 
             msg = {
                 type: 'text',
-                text: "Disk" + res 
+                text: "Disk " + res 
             }
             return client.replyMessage(event.replyToken, msg);
         });
-    } else if (eventText === 'cpuusage') {
+    } else if (eventText === 'cpu') {
         var result =  getCPUUsage()
         result.then(function (res){ 
             msg = {
