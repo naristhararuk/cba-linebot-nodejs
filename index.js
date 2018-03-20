@@ -84,7 +84,7 @@ function handleMessageEvent(event) {
             type: 'text',
             text: "Disk" + res 
             }
-        });
+        },1);
     } else if (eventText === 'cpu usage') {
         var result =  startcheckcpu()
         result.then(function (res){ 
