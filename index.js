@@ -88,11 +88,13 @@ function handleMessageEvent(event) {
     } else if (eventText === 'cpu usage') {
         var result =  startcheckcpu()
         result.then(function (res){ 
-            return msg = {
+            msg = {
                 type: 'text',
                 text: res 
             }
+            return msg
         });
+        return msg
     } else if (eventText === 'image') {
         msg = {
             'type': 'image',
